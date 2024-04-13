@@ -6,6 +6,7 @@ interface DeleteQuestionUseCaseRequest {
 }
 
 interface DeleteQuestionUseCaseResponse {}
+
 export class DeleteQuestionUseCase {
   constructor(private questionsRepository: QuestionsRepository) {}
 
@@ -18,8 +19,6 @@ export class DeleteQuestionUseCase {
     if (!question) {
       throw new Error('Question not found.')
     }
-
-    console.log(question.authorId, authorId)
 
     if (question.authorId.toString() !== authorId) {
       throw new Error('You are not allowed to delete this question.')
