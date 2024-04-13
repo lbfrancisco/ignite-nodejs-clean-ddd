@@ -13,7 +13,11 @@ describe('Answer Question Use Case', () => {
   })
 
   it('should be able to create an answer', async () => {
-    const answer = makeAnswer({ content: 'Testing answer' })
+    const { answer } = await sut.execute({
+      authorId: 'sut-author-id',
+      questionId: 'sut-question-id',
+      content: 'Testing answer',
+    })
 
     expect(answer.content).toEqual('Testing answer')
     expect(answersRepository.items[0].authorId).toEqual(answer.authorId)
