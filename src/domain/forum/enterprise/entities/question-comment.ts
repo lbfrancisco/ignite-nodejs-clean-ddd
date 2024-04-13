@@ -7,6 +7,10 @@ export interface QuestionCommentProps extends CommentProps {
 }
 
 export class QuestionComment extends Comment<QuestionCommentProps> {
+  get questionId() {
+    return this.props.questionId
+  }
+
   static create(
     props: Optional<QuestionCommentProps, 'createdAt'>,
     id?: UniqueEntityID,
@@ -20,9 +24,5 @@ export class QuestionComment extends Comment<QuestionCommentProps> {
     )
 
     return questionComment
-  }
-
-  get questionId() {
-    return this.props.questionId
   }
 }

@@ -11,21 +11,6 @@ export interface AnswerProps {
 }
 
 export class Answer extends Entity<AnswerProps> {
-  static create(
-    props: Optional<AnswerProps, 'createdAt'>,
-    id?: UniqueEntityID,
-  ) {
-    const answer = new Answer(
-      {
-        ...props,
-        createdAt: new Date(),
-      },
-      id,
-    )
-
-    return answer
-  }
-
   get authorId() {
     return this.props.authorId
   }
@@ -57,5 +42,20 @@ export class Answer extends Entity<AnswerProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
+  }
+
+  static create(
+    props: Optional<AnswerProps, 'createdAt'>,
+    id?: UniqueEntityID,
+  ) {
+    const answer = new Answer(
+      {
+        ...props,
+        createdAt: new Date(),
+      },
+      id,
+    )
+
+    return answer
   }
 }
