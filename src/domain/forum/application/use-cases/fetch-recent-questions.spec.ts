@@ -16,11 +16,15 @@ describe('Fetch Question Answers Use Case', () => {
       await questionsRepository.create(makeQuestion())
     })
 
-    const { questions } = await sut.execute({
+    const result = await sut.execute({
       page: 2,
     })
 
-    expect(questions).toHaveLength(15)
+    expect(result.isRight()).toBe(true)
+
+    if (result.isRight()) {
+      expect(result.value.questions).toHaveLength(15)
+    }
   })
 
   it('should be able to fetch recent questions ordered by created at', async () => {
@@ -36,15 +40,19 @@ describe('Fetch Question Answers Use Case', () => {
       makeQuestion({ createdAt: new Date(2024, 0, 10) }),
     )
 
-    const { questions } = await sut.execute({
+    const result = await sut.execute({
       page: 1,
     })
 
-    expect(questions).toHaveLength(3)
-    expect(questions).toEqual([
-      expect.objectContaining({ createdAt: new Date(2024, 0, 20) }),
-      expect.objectContaining({ createdAt: new Date(2024, 0, 15) }),
-      expect.objectContaining({ createdAt: new Date(2024, 0, 10) }),
-    ])
+    expect(result.isRight()).toBe(true)
+
+    if (result.isRight()) {
+      expect(result.value.questions).toHaveLength(3)
+      expect(result.value.questions).toEqual([
+        expect.objectContaining({ createdAt: new Date(2024, 0, 20) }),
+        expect.objectContaining({ createdAt: new Date(2024, 0, 15) }),
+        expect.objectContaining({ createdAt: new Date(2024, 0, 10) }),
+      ])
+    }
   })
 })

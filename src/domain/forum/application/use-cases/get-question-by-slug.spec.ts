@@ -1,9 +1,8 @@
-import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
-import { GetQuestionBySlugUseCase } from './get-question-by-slug'
-import { Question } from '../../enterprise/entities/question'
-import { Slug } from '../../enterprise/entities/value-objects/slug'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeQuestion } from 'test/factories/make-question'
+import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
+import { Slug } from '../../enterprise/entities/value-objects/slug'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { GetQuestionBySlugUseCase } from './get-question-by-slug'
 
 let questionsRepository: InMemoryQuestionsRepository
 let sut: GetQuestionBySlugUseCase
@@ -21,18 +20,23 @@ describe('Get Question By Slug Use Case', () => {
 
     await questionsRepository.create(newQuestion)
 
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       slug: 'a-testing-slug',
     })
 
-    expect(question.id).toEqual(newQuestion.id)
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: newQuestion.title,
+      }),
+    })
   })
 
   it('should not be able to get a question by non-existing slug', async () => {
-    await expect(() =>
-      sut.execute({
-        slug: 'non-existing-slug',
-      }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      slug: 'non-existing-slug',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).instanceOf(ResourceNotFoundError)
   })
 })

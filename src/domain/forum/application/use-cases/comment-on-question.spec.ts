@@ -28,15 +28,16 @@ describe('Comment On Question Use Case', () => {
       ),
     )
 
-    const { questionComment } = await sut.execute({
+    const result = await sut.execute({
       authorId: 'sut-author-id',
       questionId: 'sut-question-id',
       content: 'This is a test comment on the question',
     })
 
-    expect(questionComment.id).toBeTruthy()
-    expect(questionComment.content).toEqual(
-      'This is a test comment on the question',
-    )
+    expect(result.value).toMatchObject({
+      questionComment: expect.objectContaining({
+        content: 'This is a test comment on the question',
+      }),
+    })
   })
 })
