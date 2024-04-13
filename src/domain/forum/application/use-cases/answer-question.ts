@@ -3,8 +3,8 @@ import { AnswersRepository } from '../repositories/answers-repository'
 import { Answer } from '../../enterprise/entities/answer'
 
 interface AnswerQuestionUseCaseRequest {
-  authorId: UniqueEntityID
-  questionId: UniqueEntityID
+  authorId: string
+  questionId: string
   content: string
 }
 
@@ -21,8 +21,8 @@ export class AnswerQuestionUseCase {
     content,
   }: AnswerQuestionUseCaseRequest): Promise<AnswerQuestionUseCaseResponse> {
     const answer = Answer.create({
-      authorId,
-      questionId,
+      authorId: new UniqueEntityID(authorId),
+      questionId: new UniqueEntityID(questionId),
       content,
     })
 
