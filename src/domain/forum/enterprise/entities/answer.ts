@@ -36,6 +36,7 @@ export class Answer extends Entity<AnswerProps> {
 
   set attachments(attachments: AnswerAttachmentList) {
     this.props.attachments = attachments
+    this.touch()
   }
 
   get createdAt() {
